@@ -10,7 +10,6 @@ library(DoubletFinder)
 library(harmony)
 library(nichenetr)
 Ada_0 <- Read10X(data.dir = "/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Ada_0h/raw_feature_bc_matrix")
-# Initialize the Seurat object with the raw (non-normalized data).
 Ada_0 <- CreateSeuratObject(counts = Ada_0, project = "Time_0h", min.cells = 10, min.features = 500)
 Ada_0
 Ada_0[["percent.mt"]] <- PercentageFeatureSet(Ada_0, pattern = "^mt-")
@@ -102,7 +101,7 @@ All_merged
 
 
 #saveRDS(All_merged,"/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results/All_merged.rds")
-######################################################################### From here only baseline vs co-culture ###############################
+############## From here only baseline vs co-culture ###########
 All_merged <- readRDS("/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results_all_samples/All_merged.rds")
 All_merged <- subset(All_merged, subset = orig.ident != "Time_48h")
 
@@ -150,9 +149,7 @@ dev.off()
 ############### Subset for singlets ################
 All_merged_subset <- subset(All_merged, subset = Doublets == "Singlet")
 All_merged_subset <- SCTransform(All_merged_subset, verbose = FALSE, vars.to.regress = c("percent.mt", 'S.Score', 'G2M.Score'))
-All_merged_subset<- RunPCA(All_merged_subset, features = VariableFeatures(object = All_merged_subset))
-
-
+All_merged_subset <- RunPCA(All_merged_subset, features = VariableFeatures(object = All_merged_subset))
 All_merged_subset  <- FindNeighbors(All_merged_subset , dims = 1:20)
 All_merged_subset  <- FindClusters(All_merged_subset , resolution = 0.2)
 All_merged_subset  <- RunUMAP(All_merged_subset , dims=1:20)
@@ -189,9 +186,7 @@ DoHeatmap(All_merged_subset, features = top20$gene) + NoLegend()
 dev.off()
 
 
-######################### ON/OFF all states
 #################################### Karras et all ON OFF
-################ Signatures from Landscape top 50 ###########################################
 ##########################        Neural_like        ##########################
 All_merged_subset$Neural_like <- NULL
 genes<-c("Mest","Wnt4","Fn1","Akap12","Sema5a","Trf","Slc29a1","Csn3","Kctd12","Emilin1","Postn","Sema3d","Dhh","Igf1","Moxd1","Lmcd1","Cd200","Fibin","Igfbp4","Aqp1","Qpct","Thsd7a","Mgp","Lbhd2","Timp1","Cavin2","Plvap","Enpp2","Serpina3n","Spry4","Gja1","Ltbp1","Tmem37","Tmem158","Tm4sf1","Gsn","Egfl8","Sulf2","Fxyd5","Col11a1","Chl1","Ephx1","Bpgm","Spon1","Abcg2","Sdc4","Fth1","Itgb5","Cxxc4","Egflam")
