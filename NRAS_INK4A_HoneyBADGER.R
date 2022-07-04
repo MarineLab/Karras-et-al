@@ -20,7 +20,7 @@ library(GSEABase)
 library(GSA)
 library(Seurat)
 library(circlize)
-Takis10x <- readRDS("/Users/u0128760/Documents/PROJECTS/Takis_10x_NRAS_INK4A/NRAS13_all_43k.rds")
+Takis10x <- readRDS("/Users/Documents/PROJECTS/Takis_10x_NRAS_INK4A/NRAS13_all_43k.rds")
 Takis10x
 
 ################################################################# for HoneyBADGER ##############################
@@ -44,11 +44,7 @@ ha = HeatmapAnnotation(origin = origin,
                        malignant = malignant,
                        annotation_name_side = "left")
 
-### subsetting for immune only to use as normal for HoneyBADGER ####
-#Takis10x_normal <- subset(x=Takis10x, subset = malign_call =='non_malig')
-#Takis10x_normal@assays[["RNA"]]@counts@Dimnames[[1]] <- str_to_title(Takis10x_normal@assays[["RNA"]]@counts@Dimnames[[1]])
-#Takis10x_normal <- as.matrix(Takis10x_normal@assays[["RNA"]]@counts)
-### subsetting for immune only to use as normal for HoneyBADGER ####
+#get only immune cells
 Immune_sub <- subset(Takis10x, subset = Immune > 0.1)
 Immune_sub
 Normal_immune <- as.matrix(GetAssayData(Immune_sub@assays[["RNA"]]))
@@ -68,7 +64,7 @@ exprs	<- as.matrix(Takis10x@assays[["RNA"]]@counts)
 ##exprs		<- as.matrix(exprs[,-1])
 exprs 		<- cpm(exprs, log=TRUE)
 
-# Load a control expression matrix of more or less normal expression. This one was found in the GTex database... Make sure the IDs in both datasets are the same.
+# Load a control expression matrix of more or less normal expression.
 exprsNorm <- Normal_immune
 
 # Clean up... and normalize
@@ -92,7 +88,7 @@ exprsNorm <- rowMeans(exprsNorm)
 hb <- new('HoneyBADGER', name='Takis10x')
 
 hb$setGexpMats(exprs, exprsNorm, mart.obj, filter = FALSE, scale=TRUE, verbose=TRUE, id = "mgi_symbol")
-png("/Users/u0128760/Documents/PROJECTS/Takis_10x_NRAS_INK4A/HoneyBadger/InitViz7500Scaled_immune0_12.png")
+png("/Users/Documents/PROJECTS/Takis_10x_NRAS_INK4A/HoneyBadger/InitViz7500Scaled_immune0_12.png")
 hb$plotGexpProfile(gexp.norm.sub = hb$gexp.norm, setOrder = FALSE, returnPlot = FALSE)
 gexpPlot <- hb$plotGexpProfile(gexp.norm.sub = hb$gexp.norm, setOrder = TRUE, returnPlot = FALSE)
 dev.off()
@@ -101,11 +97,11 @@ dev.off()
 gexpPlot <- hb$plotGexpProfile(gexp.norm.sub = hb$gexp.norm, setOrder = FALSE, returnPlot = TRUE)
 plotData <- do.call(rbind, gexpPlot)
 
-write.table(plotData, file = "/Users/u0128760/Documents/PROJECTS/Takis_10x_NRAS_INK4A/HoneyBadger/HoneyBadger_results.txt", quote=F, sep="\t", row.names = T)
-saveRDS(gexpPlot, file = "/Users/u0128760/Documents/PROJECTS/Takis_10x_NRAS_INK4A/HoneyBadger/HoneyBadger_gexplot.rds")
+write.table(plotData, file = "/Users/Documents/PROJECTS/Takis_10x_NRAS_INK4A/HoneyBadger/HoneyBadger_results.txt", quote=F, sep="\t", row.names = T)
+saveRDS(gexpPlot, file = "/Users/Documents/PROJECTS/Takis_10x_NRAS_INK4A/HoneyBadger/HoneyBadger_gexplot.rds")
 
 
-pdf("/Users/u0128760/Documents/PROJECTS/Takis_10x/HoneyBadger/Final_heatmap.pdf")
+pdf("/Users/Documents/PROJECTS/Takis_10x/HoneyBadger/Final_heatmap.pdf")
 col_fun = colorRamp2(c(-1, 0, 1), c("blue", "white", "red"))
 ht<-Heatmap(plotData, 
             cluster_rows = FALSE, 
