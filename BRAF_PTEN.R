@@ -32,7 +32,7 @@ pK=as.numeric(as.character(bcmvn$pK))
 BCmetric=bcmvn$BCmetric
 pK_choose = pK[which(BCmetric %in% max(BCmetric))]
 par(mar=c(5,4,4,8)+1,cex.main=1.2,font.main=2)
-setwd("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500")
+setwd("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500")
 pdf("DF_sc5rCMA298_mm10.pdf")
 plot(x = pK, y = BCmetric, pch = 16,type="b",
      col = "blue",lty=1)
@@ -58,7 +58,7 @@ pK=as.numeric(as.character(bcmvn$pK))
 BCmetric=bcmvn$BCmetric
 pK_choose = pK[which(BCmetric %in% max(BCmetric))]
 par(mar=c(5,4,4,8)+1,cex.main=1.2,font.main=2)
-setwd("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500")
+setwd("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500")
 pdf("DF_sc5rCMA299_mm10.pdf")
 plot(x = pK, y = BCmetric, pch = 16,type="b",
      col = "blue",lty=1)
@@ -86,7 +86,7 @@ pK=as.numeric(as.character(bcmvn$pK))
 BCmetric=bcmvn$BCmetric
 pK_choose = pK[which(BCmetric %in% max(BCmetric))]
 par(mar=c(5,4,4,8)+1,cex.main=1.2,font.main=2)
-setwd("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500")
+setwd("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500")
 pdf("DF_CMA332.pdf")
 plot(x = pK, y = BCmetric, pch = 16,type="b",
      col = "blue",lty=1)
@@ -102,14 +102,14 @@ CMA332$Doublets <-  CMA332@meta.data[, grep("DF.", colnames(CMA332@meta.data))]
 
 Merged_1 <- merge(sc5rCMA298_mm10, y=c(CMA332), project="BRAF_PTEN")
 Merged_1
-saveRDS(Merged_1,"/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Merged1.rds")
+saveRDS(Merged_1,"/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Merged1.rds")
 
 Merged_1@meta.data$"orig.ident" <- plyr::revalue(as.character(Merged_1$orig.ident),
                                                  c("Primary" = "sc5rCMA298"
                                                  ))
 
 table(Merged_1$orig.ident)
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/QC.pdf", width = 14, height = 7)
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/QC.pdf", width = 14, height = 7)
 VlnPlot(Merged_1, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3, pt.size = 0, group.by = "orig.ident")
 plot1 <- FeatureScatter(Merged_1, feature1 = "nCount_RNA", feature2 = "percent.mt")
 plot2 <- FeatureScatter(Merged_1, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
@@ -119,9 +119,9 @@ dev.off()
 Merged <- subset(Merged_1, subset = nFeature_RNA > 500 & nFeature_RNA < 6000 & percent.mt < 10)
 
 
-mouse_cell_cycle_genes <- readRDS("/Users/u0128760/Documents/PROJECTS/mouse_cell_cycle_genes.rds")
+mouse_cell_cycle_genes <- readRDS("/Users/Documents/PROJECTS/mouse_cell_cycle_genes.rds")
 
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Initial_doublets.pdf")
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Initial_doublets.pdf")
 Merged<- SCTransform(Merged, vars.to.regress = c("percent.mt", "orig.ident"), verbose = FALSE)
 Merged<- RunPCA(Merged, features = VariableFeatures(object = Merged))
 VizDimLoadings(Merged, dims = 1:2, reduction = "pca")
@@ -140,7 +140,7 @@ g2m.genes <- mouse_cell_cycle_genes$g2m.genes
 Merged  <- CellCycleScoring(Merged, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
 DimPlot(Merged, reduction = "umap", group.by = 'Phase')
 dev.off()
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Initial_singlet.pdf")
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Initial_singlet.pdf")
 ############### Subset for singlets ################
 Merged_subset <- subset(Merged, subset = Doublets == "Singlet")
 Merged_subset
@@ -162,9 +162,9 @@ DimPlot(Merged_subset, reduction = "umap", group.by="Doublets")
 DimPlot(Merged_subset, reduction = "umap", group.by="orig.ident")
 dev.off()
 merged_markers <- FindAllMarkers(Merged_subset, only.pos = TRUE, min.pct = 0.3, logfc.threshold = 0.3)
-write.table(merged_markers, "/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/markers.txt", sep='\t', quote = FALSE, col.names = T, row.names = F)
+write.table(merged_markers, "/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/markers.txt", sep='\t', quote = FALSE, col.names = T, row.names = F)
 top20 <- merged_markers %>% group_by(cluster) %>% top_n(n = 20, wt = avg_logFC)
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/heatmap_markers.pdf", width = 15, height = 30)
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/heatmap_markers.pdf", width = 15, height = 30)
 DoHeatmap(Merged_subset, features = top20$gene, group.by='seurat_clusters')
 dev.off()
 table(Merged_subset$orig.ident)
@@ -174,7 +174,7 @@ Merged_subset <- RunPCA(Merged_subset , verbose = TRUE)
 Merged_subset <- RunHarmony(Merged_subset, group.by.vars = "orig.ident", assay.use="SCT")
 
 #after harmony, plot harmony Embeddings on a heatmap to asses after which number the variance drops
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/harmony_heatmap.pdf", width = 7, height = 7)
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/harmony_heatmap.pdf", width = 7, height = 7)
 harmony_embeddings <- Embeddings(Merged_subset, 'harmony')
 harmony_embeddings[1:5, 1:5]
 #col_fun = colorRamp2(c(-10, 0, 10), c("blue", "white", "red"))
@@ -190,7 +190,7 @@ Heatmap(harmony_embeddings,
         #col = col_fun,
         row_title_rot = 0)
 dev.off()
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Initial_singlet_harmony.pdf")
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Initial_singlet_harmony.pdf")
 
 Merged_subset  <- FindNeighbors(Merged_subset , dims = 1:8, reduction = "harmony")
 Merged_subset  <- FindClusters(Merged_subset , resolution = 0.3, reduction = "harmony")
@@ -200,11 +200,11 @@ DimPlot(Merged_subset, reduction = "umap", label = T, group.by = "seurat_cluster
 DimPlot(Merged_subset, reduction = "umap", group.by="Doublets")
 DimPlot(Merged_subset, reduction = "umap", group.by="orig.ident")
 dev.off()
-#saveRDS(Merged_subset, "/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Braf_Pten.rds")
+#saveRDS(Merged_subset, "/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Braf_Pten.rds")
 
-Merged_subset <- readRDS("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Braf_Pten.rds")
+Merged_subset <- readRDS("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Braf_Pten.rds")
 
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Braf_Pten_Tirosh_supermel.pdf")
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Braf_Pten_Tirosh_supermel.pdf")
 ###################Tirosh
 genes<-c("Mia","Tyr","Slc45A2","Cdh19","Pmel","Slc24A5","Magea6","Gjb1","Plp1","Prame","Capn3","Erbb3","Gpm6B","S100B","Fxyd3","Pax3","S100A1","Mlana","Slc26A2","Gpr143","Cspg4","Sox10","Mlph","Loxl4","Plekhb1","Rab38","Qpct","Birc7","Mfi2","Linc00473","Sema3B","Serpina3","Pir","Mitf","St6Galnac2","Ropn1B","Cdh1","Abcb5","Qdpr","Serpine2","Atp1A1","St3Gal4","Cdk2","Acsl3","Nt5Dc3","Igsf8","Mbp")
 geneSets <- GeneSet(genes, setName="Tirosh_malignant")
@@ -242,7 +242,7 @@ Mailg_braf_pten<- RunPCA(Mailg_braf_pten)
 Mailg_braf_pten <- RunHarmony(Mailg_braf_pten, group.by.vars = "orig.ident", assay.use="SCT")
 
 #after harmony plot harmony Embeddings on a heatmap to asses after which number the variance drops
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/harmony_heatmap_malig.pdf", width = 7, height = 7)
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/harmony_heatmap_malig.pdf", width = 7, height = 7)
 harmony_embeddings <- Embeddings(Mailg_braf_pten, 'harmony')
 harmony_embeddings[1:5, 1:5]
 #col_fun = colorRamp2(c(-10, 0, 10), c("blue", "white", "red"))
@@ -263,12 +263,12 @@ Mailg_braf_pten  <- FindClusters(Mailg_braf_pten , resolution = 0.4, reduction =
 Mailg_braf_pten  <- RunUMAP(Mailg_braf_pten , dims=1:7, reduction = "harmony") 
 DimPlot(Mailg_braf_pten, reduction = "umap", group.by = "seurat_clusters") +NoAxes()
 
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/UMAP_clusters.pdf", width = 4, height = 4)
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/UMAP_clusters.pdf", width = 4, height = 4)
 DimPlot(Mailg_braf_pten, reduction = "umap", group.by = "seurat_clusters") +NoAxes()
 DimPlot(Mailg_braf_pten, reduction = "umap", group.by="orig.ident")
 dev.off()
 
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/MITF_SOX10_MALANA_Prrx1_clusters.pdf", width = 4, height = 4)
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/MITF_SOX10_MALANA_Prrx1_clusters.pdf", width = 4, height = 4)
 FeaturePlot(Mailg_braf_pten, features = c("Mitf"))
 FeaturePlot(Mailg_braf_pten, features = c("Sox10"))
 FeaturePlot(Mailg_braf_pten, features = c("Mlana"))
@@ -277,9 +277,9 @@ dev.off()
 
 Idents(Mailg_braf_pten) <- "seurat_clusters"
 merged_markers <- FindAllMarkers(Mailg_braf_pten, only.pos = TRUE, min.pct = 0.3, logfc.threshold = 0.3)
-write.table(merged_markers, "/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/markers_malig.txt", sep='\t', quote = FALSE, col.names = T, row.names = F)
+write.table(merged_markers, "/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/markers_malig.txt", sep='\t', quote = FALSE, col.names = T, row.names = F)
 top20 <- merged_markers %>% group_by(cluster) %>% top_n(n = 20, wt = avg_logFC)
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/heatmap_markers_malig.pdf", width = 15, height = 15)
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/heatmap_markers_malig.pdf", width = 15, height = 15)
 DoHeatmap(Mailg_braf_pten, features = top20$gene, group.by='seurat_clusters')
 dev.off()
 
@@ -295,12 +295,12 @@ cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1,
 Verfaillie_PRO<-getAUC(cells_AUC)
 Verfaillie_PRO<-t(Verfaillie_PRO)
 Mailg_braf_pten@meta.data<-cbind(Mailg_braf_pten@meta.data, Verfaillie_PRO)
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Verfaillie_PRO_vln.pdf", width = 5, height = 4)
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Verfaillie_PRO_vln.pdf", width = 5, height = 4)
 FeaturePlot(Mailg_braf_pten, features = "Verfaillie_PRO")
 VlnPlot(Mailg_braf_pten, features = "Verfaillie_PRO", pt.size = 0) + theme(plot.margin=unit(c(1,1,1.5,1.5),"cm"), legend.position = 'none')
 dev.off()
 
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Mitf.pdf", width = 5, height = 4)
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Mitf.pdf", width = 5, height = 4)
 FeaturePlot(Mailg_braf_pten, features = "Mitf")
 dev.off()
 
@@ -321,12 +321,12 @@ cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1,
 Verfaillie_INV<-getAUC(cells_AUC)
 Verfaillie_INV<-t(Verfaillie_INV)
 Mailg_braf_pten@meta.data<-cbind(Mailg_braf_pten@meta.data, Verfaillie_INV)
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Verfaillie_INV_vln.pdf", width = 5, height = 4)
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Verfaillie_INV_vln.pdf", width = 5, height = 4)
 FeaturePlot(Mailg_braf_pten, features = "Verfaillie_INV")
 VlnPlot(Mailg_braf_pten, features = "Verfaillie_INV", pt.size = 0) + theme(plot.margin=unit(c(1,1,1.5,1.5),"cm"), legend.position = 'none')
 dev.off()
 
-Mailg_braf_pten <- readRDS("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Mailg_braf_pten.rds")
+Mailg_braf_pten <- readRDS("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Mailg_braf_pten.rds")
 
 ################ Signatures from NRAS/INK4A mouse  ###########################################
 ##########################        Neural_like        ##########################
@@ -336,7 +336,7 @@ geneSets <- GeneSet(genes, setName="Neural_like")
 geneSets
 cells_rankings <- AUCell_buildRankings(Mailg_braf_pten@assays[["SCT"]]@counts)
 cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Neural_like.pdf", width = 4, height = 4)
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Neural_like.pdf", width = 4, height = 4)
 cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
 Neural_like<-getAUC(cells_AUC)
 Neural_like<-t(Neural_like)
@@ -346,7 +346,7 @@ VlnPlot(Mailg_braf_pten, features = "Neural_like", pt.size = 0) + theme(legend.p
 dev.off()
 Mailg_braf_pten$Neural_like_ON_OFF <- ifelse(Mailg_braf_pten$Neural_like > 0.13,  "ON", "OFF")
 DimPlot(Mailg_braf_pten, group.by = "Neural_like_ON_OFF", cols = c('grey', 'blue'), pt.size = 1.5) +NoAxes()
-dev.copy2pdf(file="/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Neural_like_ON_OFF.pdf",useDingbats=FALSE,family="sans")
+dev.copy2pdf(file="/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Neural_like_ON_OFF.pdf",useDingbats=FALSE,family="sans")
 
 
 ##########################        Melanocytic_OXPHOS        ##########################
@@ -355,7 +355,7 @@ geneSets <- GeneSet(genes, setName="Melanocytic_OXPHOS")
 geneSets
 #cells_rankings <- AUCell_buildRankings(Mailg_braf_pten@assays[["SCT"]]@counts)
 cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Melanocytic_OXPHOS.pdf", width = 7.08, height = 5.8)
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Melanocytic_OXPHOS.pdf", width = 7.08, height = 5.8)
 cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
 Melanocytic_OXPHOS<-getAUC(cells_AUC)
 Melanocytic_OXPHOS<-t(Melanocytic_OXPHOS)
@@ -366,39 +366,8 @@ dev.off()
 Mailg_braf_pten$Melanocytic_OXPHOS_ON_OFF <- ifelse(Mailg_braf_pten$Melanocytic_OXPHOS > 0.34,  "ON", "OFF")
 table(Mailg_braf_pten$Melanocytic_OXPHOS_ON_OFF )
 DimPlot(Mailg_braf_pten, group.by = "Melanocytic_OXPHOS_ON_OFF", cols = c('grey', 'blue'), pt.size = 1.5) +NoAxes()
-dev.copy2pdf(file="/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Melanocytic_OXPHOS_ON_OFF.pdf",useDingbats=FALSE,family="sans")
+dev.copy2pdf(file="/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Melanocytic_OXPHOS_ON_OFF.pdf",useDingbats=FALSE,family="sans")
 
-
-##########################        Trans_reg        ##########################
-genes<-c("Pabpn1","Ccnl1","Pnisr","Sfpq","Ccnl2","Bclaf1","Hnrnpu","Rbm25","Luc7l2","Ddx17","Cpsf6","Snrnp70","Srek1","Prpf4b","Srrm2","Rbm39","Son","Ddx5","Prpf38b","Pan3","Tra2a","Hnrnph1","Fus")
-geneSets <- GeneSet(genes, setName="Trans_reg")
-geneSets
-#cells_rankings <- AUCell_buildRankings(Mailg_braf_pten@assays[["SCT"]]@counts)
-cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Trans_reg.pdf", width = 7.08, height = 5.8)
-cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
-Trans_reg<-getAUC(cells_AUC)
-Trans_reg<-t(Trans_reg)
-Mailg_braf_pten@meta.data<-cbind(Mailg_braf_pten@meta.data, Trans_reg)
-FeaturePlot(Mailg_braf_pten, features = "Trans_reg", label = T)
-VlnPlot(Mailg_braf_pten, features = "Trans_reg") + theme(legend.position = 'none')
-dev.off()
-
-
-##########################        Stress_hypoxia        ##########################
-genes<-c("Bnip3","Tpi1","Slc2a1","Mif","Vldlr","Hk2","Vegfa","Ldha","Pfkl","P4ha1","Fam162a","Bhlhe40","Pgk1","Aldoa","Pfkp","Pdk1","Hspa9","Pgam1","Pkm","Atf4")
-geneSets <- GeneSet(genes, setName="Stress_hypoxia")
-geneSets
-#cells_rankings <- AUCell_buildRankings(Mailg_braf_pten@assays[["SCT"]]@counts)
-cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Stress_hypoxia.pdf", width = 7.08, height = 5.8)
-cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
-Stress_hypoxia<-getAUC(cells_AUC)
-Stress_hypoxia<-t(Stress_hypoxia)
-Mailg_braf_pten@meta.data<-cbind(Mailg_braf_pten@meta.data, Stress_hypoxia)
-FeaturePlot(Mailg_braf_pten, features = "Stress_hypoxia", label = T)
-VlnPlot(Mailg_braf_pten, features = "Stress_hypoxia") + theme(legend.position = 'none')
-dev.off()
 
 
 ##########################        Stem_like         ##########################
@@ -407,7 +376,7 @@ geneSets <- GeneSet(genes, setName="Stem_like")
 geneSets
 #cells_rankings <- AUCell_buildRankings(Mailg_braf_pten@assays[["SCT"]]@counts)
 cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Stem_like.pdf", width = 4, height = 4)
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Stem_like.pdf", width = 4, height = 4)
 cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
 Stem_like<-getAUC(cells_AUC)
 Stem_like<-t(Stem_like)
@@ -420,26 +389,8 @@ dev.off()
 
 Mailg_braf_pten$Stem_like_ON_OFF <- ifelse(Mailg_braf_pten$Stem_like > 0.04,  "ON", "OFF")
 DimPlot(Mailg_braf_pten, group.by = "Stem_like_ON_OFF", cols = c('grey', 'blue'), pt.size = 1.5) +NoAxes()
-dev.copy2pdf(file="/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Stem_like_ON_OFF.pdf",useDingbats=FALSE,family="sans")
+dev.copy2pdf(file="/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Stem_like_ON_OFF.pdf",useDingbats=FALSE,family="sans")
 
-
-##########################        Immune        ##########################
-genes<-c("Gbp4","Gbp6","Irf1","Nlrc5","Stat2","Cd74","Il12rb1","B2m","Gbp2","Ifit3","Gbp3","Psmb8","Stat1","Ifit1","Isg15","Psmb9","Gbp7","Xaf1","Tap1","Gbp5","Usp18","Ciita","Irf7","Ube2l6","Tap2","Psme1","Ifitm3","Psme2","Tapbp","Ifi35","Eif2ak2","Irf9","Ddx58","Trim25","Ifit2","Irf8","H2-DMa","H2-Aa","H2-DMb1","H2-Eb1","H2-Ab1","H2-T23")
-library(nichenetr)
-#genes1 <- convert_mouse_to_human_symbols(genes)
-#genes1 <- unique(genes1)
-geneSets <- GeneSet(genes, setName="Immune")
-geneSets
-cells_rankings <- AUCell_buildRankings(Mailg_braf_pten@assays[["SCT"]]@counts)
-cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Immune.pdf", width = 7.08, height = 5.8)
-cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
-Immune<-getAUC(cells_AUC)
-Immune<-t(Immune)
-Mailg_braf_pten@meta.data<-cbind(Mailg_braf_pten@meta.data, Immune)
-FeaturePlot(Mailg_braf_pten, features = "Immune", label = T)
-VlnPlot(Mailg_braf_pten, features = "Immune") + theme(legend.position = 'none')
-dev.off()
 
 
 ##########################        Mesenchymal        ##########################
@@ -448,7 +399,7 @@ geneSets <- GeneSet(genes, setName="Mesenchymal")
 geneSets
 #cells_rankings <- AUCell_buildRankings(Mailg_braf_pten@assays[["SCT"]]@counts)
 cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Mesenchymal.pdf", width = 7.08, height = 5.8)
+pdf("/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Mesenchymal.pdf", width = 7.08, height = 5.8)
 cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
 Mesenchymal<-getAUC(cells_AUC)
 Mesenchymal<-t(Mesenchymal)
@@ -460,6 +411,6 @@ hist(Mailg_braf_pten$Mesenchymal)
 Mailg_braf_pten$Mesenchymal_ON_OFF <- ifelse(Mailg_braf_pten$Mesenchymal > 0.067,  "ON", "OFF")
 table(Mailg_braf_pten$Mesenchymal_ON_OFF)
 DimPlot(Mailg_braf_pten, group.by = "Mesenchymal_ON_OFF", cols = c('grey', 'blue'), pt.size = 1.5) +NoAxes()
-dev.copy2pdf(file="/Users/u0128760/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Mesenchymal_ON_OFF.pdf",useDingbats=FALSE,family="sans")
+dev.copy2pdf(file="/Users/Documents/PROJECTS/BRAF_PTEN_heterogeneity/Results_500/Mesenchymal_ON_OFF.pdf",useDingbats=FALSE,family="sans")
 
 
