@@ -9,7 +9,8 @@ library(GSA)
 library(DoubletFinder)
 library(harmony)
 library(nichenetr)
-Ada_0 <- Read10X(data.dir = "/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Ada_0h/raw_feature_bc_matrix")
+Ada_0 <- Read10X(data.dir = "/Users/Documents/PROJECTS/Endothelial_expr/Ada_0h/raw_feature_bc_matrix")
+# Initialize the Seurat object with the raw (non-normalized data).
 Ada_0 <- CreateSeuratObject(counts = Ada_0, project = "Time_0h", min.cells = 10, min.features = 500)
 Ada_0
 Ada_0[["percent.mt"]] <- PercentageFeatureSet(Ada_0, pattern = "^mt-")
@@ -21,7 +22,7 @@ pK=as.numeric(as.character(bcmvn$pK))
 BCmetric=bcmvn$BCmetric
 pK_choose = pK[which(BCmetric %in% max(BCmetric))]
 par(mar=c(5,4,4,8)+1,cex.main=1.2,font.main=2)
-setwd("/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results")
+setwd("/Users/Documents/PROJECTS/Endothelial_expr/Results")
 pdf("DF_Ada_0.pdf")
 plot(x = pK, y = BCmetric, pch = 16,type="b",
      col = "blue",lty=1)
@@ -36,7 +37,7 @@ Ada_0$Doublets <-  Ada_0@meta.data[, grep("DF.", colnames(Ada_0@meta.data))]
 
 
 
-Ada_48h <- Read10X(data.dir = "/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Ada_48h/raw_feature_bc_matrix")
+Ada_48h <- Read10X(data.dir = "/Users/Documents/PROJECTS/Endothelial_expr/Ada_48h/raw_feature_bc_matrix")
 # Initialize the Seurat object with the raw (non-normalized data).
 Ada_48h <- CreateSeuratObject(counts = Ada_48h, project = "Time_48h", min.cells = 10, min.features = 500)
 Ada_48h
@@ -49,7 +50,7 @@ pK=as.numeric(as.character(bcmvn$pK))
 BCmetric=bcmvn$BCmetric
 pK_choose = pK[which(BCmetric %in% max(BCmetric))]
 par(mar=c(5,4,4,8)+1,cex.main=1.2,font.main=2)
-setwd("/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results")
+setwd("/Users/Documents/PROJECTS/Endothelial_expr/Results")
 pdf("DF_Ada_48h.pdf")
 plot(x = pK, y = BCmetric, pch = 16,type="b",
      col = "blue",lty=1)
@@ -64,7 +65,7 @@ Ada_48h$Doublets <-  Ada_48h@meta.data[, grep("DF.", colnames(Ada_48h@meta.data)
 
 
 
-Ada_coculture <- Read10X(data.dir = "/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Ada_coculture/raw_feature_bc_matrix")
+Ada_coculture <- Read10X(data.dir = "/Users/Documents/PROJECTS/Endothelial_expr/Ada_coculture/raw_feature_bc_matrix")
 # Initialize the Seurat object with the raw (non-normalized data).
 Ada_coculture <- CreateSeuratObject(counts = Ada_coculture, project = "Coculture", min.cells = 10, min.features = 500)
 Ada_coculture
@@ -77,7 +78,7 @@ pK=as.numeric(as.character(bcmvn$pK))
 BCmetric=bcmvn$BCmetric
 pK_choose = pK[which(BCmetric %in% max(BCmetric))]
 par(mar=c(5,4,4,8)+1,cex.main=1.2,font.main=2)
-setwd("/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results")
+setwd("/Users/Documents/PROJECTS/Endothelial_expr/Results")
 pdf("DF_Ada_coculture.pdf")
 plot(x = pK, y = BCmetric, pch = 16,type="b",
      col = "blue",lty=1)
@@ -100,13 +101,13 @@ All_merged <- merge(Ada_0, y=c(Ada_48h, Ada_coculture), project="All_merged")
 All_merged
 
 
-#saveRDS(All_merged,"/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results/All_merged.rds")
-############## From here only baseline vs co-culture ###########
-All_merged <- readRDS("/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results_all_samples/All_merged.rds")
+#saveRDS(All_merged,"/Users/Documents/PROJECTS/Endothelial_expr/Results/All_merged.rds")
+######################################################################### From here only baseline vs co-culture ###############################
+All_merged <- readRDS("/Users/Documents/PROJECTS/Endothelial_expr/Results_all_samples/All_merged.rds")
 All_merged <- subset(All_merged, subset = orig.ident != "Time_48h")
 
 table(All_merged$orig.ident)
-DirRes <- "/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results"
+DirRes <- "/Users/Documents/PROJECTS/Endothelial_expr/Results"
 
 pdf(file.path(DirRes, "QC.pdf"), width = 14, height = 7)
 All_merged[["percent.mt"]] <- PercentageFeatureSet(All_merged, pattern = "^mt-")
@@ -139,7 +140,7 @@ DimPlot(All_merged, reduction = "umap", label = T, group.by = "seurat_clusters")
 DimPlot(All_merged, reduction = "umap", group.by="Doublets")
 DimPlot(All_merged, reduction = "umap", group.by="orig.ident")
 All_merged
-mouse_cell_cycle_genes <- readRDS("/Users/u0128760/Documents/PROJECTS/mouse_cell_cycle_genes.rds")
+mouse_cell_cycle_genes <- readRDS("/Users/Documents/PROJECTS/mouse_cell_cycle_genes.rds")
 s.genes <- mouse_cell_cycle_genes$s.genes
 g2m.genes <- mouse_cell_cycle_genes$g2m.genes
 All_merged  <- CellCycleScoring(All_merged, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
@@ -149,11 +150,13 @@ dev.off()
 ############### Subset for singlets ################
 All_merged_subset <- subset(All_merged, subset = Doublets == "Singlet")
 All_merged_subset <- SCTransform(All_merged_subset, verbose = FALSE, vars.to.regress = c("percent.mt", 'S.Score', 'G2M.Score'))
-All_merged_subset <- RunPCA(All_merged_subset, features = VariableFeatures(object = All_merged_subset))
+All_merged_subset<- RunPCA(All_merged_subset, features = VariableFeatures(object = All_merged_subset))
+
+
 All_merged_subset  <- FindNeighbors(All_merged_subset , dims = 1:20)
 All_merged_subset  <- FindClusters(All_merged_subset , resolution = 0.2)
 All_merged_subset  <- RunUMAP(All_merged_subset , dims=1:20)
-pdf("/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results/UMAPs_including_EC.pdf")
+pdf("/Users/Documents/PROJECTS/Endothelial_expr/Results/UMAPs_including_EC.pdf")
 DimPlot(All_merged_subset, reduction = "umap", label = T, group.by = "seurat_clusters")
 DimPlot(All_merged_subset, reduction = "umap", group.by="orig.ident")
 FeaturePlot(All_merged_subset, c("Pecam1", "Sox10", "S100a1"))
@@ -171,22 +174,24 @@ All_merged_subset  <- FindNeighbors(All_merged_subset , dims = 1:20)
 All_merged_subset  <- FindClusters(All_merged_subset , resolution = 0.2)
 All_merged_subset  <- RunUMAP(All_merged_subset , dims=1:20)
 
-pdf("/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results/UMAPs.pdf")
+pdf("/Users/Documents/PROJECTS/Endothelial_expr/Results/UMAPs.pdf")
 DimPlot(All_merged_subset, reduction = "umap", label = T, group.by = "seurat_clusters")
 DimPlot(All_merged_subset, reduction = "umap", group.by="orig.ident")
 dev.off()
-#saveRDS(All_merged_subset, "/Users/u0128760/Documents/PROJECTS/Endothelial_expr/All_merged_subset_no_pecam1.rds")
+#saveRDS(All_merged_subset, "/Users/Documents/PROJECTS/Endothelial_expr/All_merged_subset_no_pecam1.rds")
 
 markers <- FindAllMarkers(All_merged_subset, only.pos = TRUE, min.pct = 0.3, logfc.threshold = 0.3) # 0.3, 0.4 before
-write.table(markers, "/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results/markers.txt", sep='\t', quote = FALSE, col.names = T, row.names = F)
+write.table(markers, "/Users/Documents/PROJECTS/Endothelial_expr/Results/markers.txt", sep='\t', quote = FALSE, col.names = T, row.names = F)
 top20 <- markers %>% group_by(cluster) %>% top_n(n = 20, wt = avg_logFC)
 
-pdf("/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results/Heatmap.pdf", width = 10, height = 13)
+pdf("/Users/Documents/PROJECTS/Endothelial_expr/Results/Heatmap.pdf", width = 10, height = 13)
 DoHeatmap(All_merged_subset, features = top20$gene) + NoLegend()
 dev.off()
 
 
+######################### ON/OFF all states
 #################################### Karras et all ON OFF
+################ Signatures from Landscape top 50 ###########################################
 ##########################        Neural_like        ##########################
 All_merged_subset$Neural_like <- NULL
 genes<-c("Mest","Wnt4","Fn1","Akap12","Sema5a","Trf","Slc29a1","Csn3","Kctd12","Emilin1","Postn","Sema3d","Dhh","Igf1","Moxd1","Lmcd1","Cd200","Fibin","Igfbp4","Aqp1","Qpct","Thsd7a","Mgp","Lbhd2","Timp1","Cavin2","Plvap","Enpp2","Serpina3n","Spry4","Gja1","Ltbp1","Tmem37","Tmem158","Tm4sf1","Gsn","Egfl8","Sulf2","Fxyd5","Col11a1","Chl1","Ephx1","Bpgm","Spon1","Abcg2","Sdc4","Fth1","Itgb5","Cxxc4","Egflam")
@@ -194,7 +199,7 @@ geneSets <- GeneSet(genes, setName="Neural_like")
 geneSets
 #cells_rankings <- AUCell_buildRankings(All_merged_subset@assays[["SCT"]]@counts)
 cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results/Neural_like.pdf", width = 4, height = 4)
+pdf("/Users/Documents/PROJECTS/Endothelial_expr/Results/Neural_like.pdf", width = 4, height = 4)
 cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
 Neural_like<-getAUC(cells_AUC)
 Neural_like<-t(Neural_like)
@@ -212,7 +217,7 @@ geneSets <- GeneSet(genes, setName="Melanocytic_OXPHOS")
 geneSets
 #cells_rankings <- AUCell_buildRankings(All_merged_subset@assays[["SCT"]]@counts)
 cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results/Melanocytic_OXPHOS.pdf", width = 7.08, height = 5.8)
+pdf("/Users/Documents/PROJECTS/Endothelial_expr/Results/Melanocytic_OXPHOS.pdf", width = 7.08, height = 5.8)
 cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
 Melanocytic_OXPHOS<-getAUC(cells_AUC)
 Melanocytic_OXPHOS<-t(Melanocytic_OXPHOS)
@@ -233,7 +238,7 @@ geneSets <- GeneSet(genes, setName="Stem_like")
 geneSets
 #cells_rankings <- AUCell_buildRankings(All_merged_subset@assays[["SCT"]]@counts)
 cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results/Stem_like.pdf", width = 4, height = 4)
+pdf("/Users/Documents/PROJECTS/Endothelial_expr/Results/Stem_like.pdf", width = 4, height = 4)
 cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
 Stem_like<-getAUC(cells_AUC)
 Stem_like<-t(Stem_like)
@@ -271,7 +276,7 @@ cell_percentage
 cell_percentage <- subset(cell_percentage, subset = STEM_ON_OFF =="ON")
 cell_percentage
 cell_percentage$Sample <- factor(cell_percentage$Sample, levels = c("Control", "Coculture"))
-pdf("/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results/Stem_signature_ON_OFF.pdf", width = 3, height = 3)
+pdf("/Users/Documents/PROJECTS/Endothelial_expr/Results/Stem_signature_ON_OFF.pdf", width = 3, height = 3)
 ggbarplot(cell_percentage, x = "Sample", y = "percentage",shape = "STEM_ON_OFF", fill = "STEM_ON_OFF", title = "preEMT signature ON") +NoLegend()
 dev.off()
 
@@ -299,7 +304,7 @@ cell_percentage <- subset(cell_percentage, subset = Neural_like_ON_OFF =="ON")
 cell_percentage
 cell_percentage$Sample <- factor(cell_percentage$Sample, levels = c("Control", "Coculture"))
 
-pdf("/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results/Neural_signature_ON_OFF.pdf", width = 3, height = 3)
+pdf("/Users/Documents/PROJECTS/Endothelial_expr/Results/Neural_signature_ON_OFF.pdf", width = 3, height = 3)
 ggbarplot(cell_percentage, x = "Sample", y = "percentage",shape = "Neural_like_ON_OFF", fill = "Neural_like_ON_OFF", title = "Neural-like signature ON") +NoLegend()
 dev.off()
 
@@ -326,7 +331,7 @@ cell_percentage
 cell_percentage <- subset(cell_percentage, subset = Melanocytic_ON_OFF =="ON")
 cell_percentage
 cell_percentage$Sample <- factor(cell_percentage$Sample, levels = c("Control", "Coculture"))
-pdf("/Users/u0128760/Documents/PROJECTS/Endothelial_expr/Results/Melanocytic_signature_ON_OFF.pdf", width = 3, height = 3)
+pdf("/Users/Documents/PROJECTS/Endothelial_expr/Results/Melanocytic_signature_ON_OFF.pdf", width = 3, height = 3)
 ggbarplot(cell_percentage, x = "Sample", y = "percentage",shape = "Melanocytic_ON_OFF", fill = "Melanocytic_ON_OFF", title = "Melanocytic signature ON") +NoLegend()
 dev.off()
 
