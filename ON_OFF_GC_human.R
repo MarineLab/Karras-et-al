@@ -1,7 +1,6 @@
 library(nichenetr)
-GC_malignant_subset_BT <- readRDS("/Users/u0128760/Documents/PROJECTS/Resource_paper_BT/MALIGNANT/Malignant_BT.rds")
+GC_malignant_subset_BT <- readRDS("/Users/Documents/PROJECTS/MALIGNANT/Malignant_BT.rds")
 #################################### Karras et all ON OFF
-################ Signatures from Landscape paper ###########################################
 ##########################        Neural_like        ##########################
 genes<-c("Tfap2b","Prnp","Mef2c","Gfra1","Cd200","Syt11","Thsd7a","Cxxc4","Sema5a","Tbx3","Kif26b","Efhd1","Neto2","Hmcn1","Igsf10","Olfml3","Rgs2","Nt5e","Morc4","Aqp1","Gfra2","Wnt4","Abcg2","Elovl5","Emilin1","Fibin")
 genes <- convert_mouse_to_human_symbols(genes)
@@ -10,7 +9,7 @@ geneSets <- GeneSet(genes, setName="Neural_like")
 geneSets
 cells_rankings <- AUCell_buildRankings(GC_malignant_subset_BT@assays[["SCT"]]@counts)
 cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/Resource_paper_BT/MALIGNANT/Neural_like_mouse_NEW.pdf", width = 4, height = 4)
+pdf("/Users/Documents/PROJECTS/MALIGNANT/Neural_like_mouse_NEW.pdf", width = 4, height = 4)
 cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
 Neural_like<-getAUC(cells_AUC)
 Neural_like<-t(Neural_like)
@@ -30,7 +29,7 @@ geneSets <- GeneSet(genes, setName="Melanocytic_OXPHOS")
 geneSets
 #cells_rankings <- AUCell_buildRankings(GC_malignant_subset_BT@assays[["SCT"]]@counts)
 cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/Resource_paper_BT/MALIGNANT/Melanocytic_OXPHOS_mouse_NEW.pdf", width = 7.08, height = 5.8)
+pdf("/Users/Documents/PROJECTS/MALIGNANT/Melanocytic_OXPHOS_mouse_NEW.pdf", width = 7.08, height = 5.8)
 cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
 Melanocytic_OXPHOS<-getAUC(cells_AUC)
 Melanocytic_OXPHOS<-t(Melanocytic_OXPHOS)
@@ -51,7 +50,7 @@ geneSets <- GeneSet(genes, setName="Trans_reg")
 geneSets
 #cells_rankings <- AUCell_buildRankings(GC_malignant_subset_BT@assays[["SCT"]]@counts)
 cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/Resource_paper_BT/MALIGNANT/Trans_reg_mouse_NEW.pdf", width = 7.08, height = 5.8)
+pdf("/Users/Documents/PROJECTS/MALIGNANT/Trans_reg_mouse_NEW.pdf", width = 7.08, height = 5.8)
 cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
 Trans_reg<-getAUC(cells_AUC)
 Trans_reg<-t(Trans_reg)
@@ -72,7 +71,7 @@ geneSets <- GeneSet(genes, setName="Glycolytic_UPR")
 geneSets
 #cells_rankings <- AUCell_buildRankings(GC_malignant_subset_BT@assays[["SCT"]]@counts)
 cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/Resource_paper_BT/MALIGNANT/Glycolytic_UPR_mouse_NEW.pdf", width = 7.08, height = 5.8)
+pdf("/Users/Documents/PROJECTS/MALIGNANT/Glycolytic_UPR_mouse_NEW.pdf", width = 7.08, height = 5.8)
 cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
 Glycolytic_UPR<-getAUC(cells_AUC)
 Glycolytic_UPR<-t(Glycolytic_UPR)
@@ -93,7 +92,7 @@ geneSets <- GeneSet(genes, setName="Stem_like")
 geneSets
 #cells_rankings <- AUCell_buildRankings(GC_malignant_subset_BT@assays[["SCT"]]@counts)
 cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/Resource_paper_BT/MALIGNANT/Stem_like_mouse_NEW.pdf", width = 4, height = 4)
+pdf("/Users/Documents/PROJECTS/MALIGNANT/Stem_like_mouse_NEW.pdf", width = 4, height = 4)
 cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
 Stem_like<-getAUC(cells_AUC)
 Stem_like<-t(Stem_like)
@@ -116,7 +115,7 @@ geneSets <- GeneSet(genes, setName="Immune")
 geneSets
 #cells_rankings <- AUCell_buildRankings(GC_malignant_subset_BT@assays[["SCT"]]@counts)
 cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/Resource_paper_BT/MALIGNANT/Immune_mouse_NEW.pdf", width = 7.08, height = 5.8)
+pdf("/Users/Documents/PROJECTS/MALIGNANT/Immune_mouse_NEW.pdf", width = 7.08, height = 5.8)
 cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
 Immune<-getAUC(cells_AUC)
 Immune<-t(Immune)
@@ -136,7 +135,7 @@ geneSets <- GeneSet(genes, setName="Mesenchymal")
 geneSets
 #cells_rankings <- AUCell_buildRankings(GC_malignant_subset_BT@assays[["SCT"]]@counts)
 cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=nrow(cells_rankings)*0.05)
-pdf("/Users/u0128760/Documents/PROJECTS/Resource_paper_BT/MALIGNANT/Mesenchymal_mouse_NEW.pdf", width = 7.08, height = 5.8)
+pdf("/Users/Documents/PROJECTS/MALIGNANT/Mesenchymal_mouse_NEW.pdf", width = 7.08, height = 5.8)
 cells_assignment <- AUCell_exploreThresholds(cells_AUC, plotHist=TRUE, nCores=1, assign=TRUE)
 Mesenchymal<-getAUC(cells_AUC)
 Mesenchymal<-t(Mesenchymal)
@@ -148,8 +147,7 @@ VlnPlot(GC_malignant_subset_BT, features = "Mesenchymal", pt.size = 0, group.by 
 dev.off()
 
 
-############## heatmap 
-####################################heatmap#########################################################
+#################################### heatmap #########################################################
 reglist <- c("Malignant_clusters","Immune","Melanocytic_OXPHOS","Mesenchymal",  "Neural_like","Stem_like", "Trans_reg", "Glycolytic_UPR")
 matr <- FetchData(GC_malignant_subset_BT, vars = reglist, cells = NULL) # %>%
 #apply(2, function(x) (x - min(x)) / (max(x) - min(x))) # %>%
@@ -188,7 +186,7 @@ ht<-ComplexHeatmap::Heatmap(mat_scaled,
                             top_annotation = ha,
                             #col = color_list,
                             column_split = Malignant_clusters)
-pdf("/Users/u0128760/Documents/PROJECTS/Resource_paper_BT/MALIGNANT/scores_heatmap_av_Karras_et_al_NEW.pdf", width = 10, height = 6)
+pdf("/Users/Documents/PROJECTS/MALIGNANT/scores_heatmap_av_Karras_et_al_NEW.pdf", width = 10, height = 6)
 draw(ht)
 dev.off()
 
@@ -235,15 +233,15 @@ Mesenchymal_ON <- MESENCHYMAL_ON_OFF %>% subset(MESENCHYMAL_ON_OFF =="ON")
 Mesenchymal_ON$ON_ALL <- paste("Mesenchymal", Mesenchymal_ON$MESENCHYMAL_ON_OFF, sep="_")
 
 DimPlot(GC_malignant_subset_BT, group.by = c("STEM_ON_OFF"), cols = c("grey", "blue")) +NoAxes()
-dev.copy2pdf(file="/Users/u0128760/Documents/PROJECTS/Resource_paper_BT/MALIGNANT/STEM_ON_OFF_markers.pdf",useDingbats=FALSE,family="sans")
+dev.copy2pdf(file="/Users/Documents/PROJECTS/MALIGNANT/STEM_ON_OFF_markers.pdf",useDingbats=FALSE,family="sans")
 DimPlot(GC_malignant_subset_BT, group.by = c("NEURAL_ON_OFF"), cols = c("grey", "blue"))+NoAxes()
-dev.copy2pdf(file="/Users/u0128760/Documents/PROJECTS/Resource_paper_BT/MALIGNANT/NEURAL_ON_OFF_markers.pdf",useDingbats=FALSE,family="sans")
+dev.copy2pdf(file="/Users/Documents/PROJECTS/MALIGNANT/NEURAL_ON_OFF_markers.pdf",useDingbats=FALSE,family="sans")
 DimPlot(GC_malignant_subset_BT, group.by = c("MELANOCYTIC_ON_OFF"), cols = c("grey", "blue"))+NoAxes()
-dev.copy2pdf(file="/Users/u0128760/Documents/PROJECTS/Resource_paper_BT/MALIGNANT/MELANOCYTIC_ON_OFF_markers.pdf",useDingbats=FALSE,family="sans")
+dev.copy2pdf(file="/Users/Documents/PROJECTS/MALIGNANT/MELANOCYTIC_ON_OFF_markers.pdf",useDingbats=FALSE,family="sans")
 DimPlot(GC_malignant_subset_BT, group.by = c("MESENCHYMAL_ON_OFF"), cols = c("grey", "blue"))+NoAxes()
-dev.copy2pdf(file="/Users/u0128760/Documents/PROJECTS/Resource_paper_BT/MALIGNANT/MESENCHYMAL_ON_OFF_ON_OFF_markers.pdf",useDingbats=FALSE,family="sans")
+dev.copy2pdf(file="/Users/Documents/PROJECTS/MALIGNANT/MESENCHYMAL_ON_OFF_ON_OFF_markers.pdf",useDingbats=FALSE,family="sans")
 
-pdf("/Users/u0128760/Documents/PROJECTS/Resource_paper_BT/MALIGNANT/Stem_like_ON_OFF_markers.pdf", width = 10, height = 10)
+pdf("/Users/Documents/PROJECTS/MALIGNANT/Stem_like_ON_OFF_markers.pdf", width = 10, height = 10)
 VlnPlot(GC_malignant_subset_BT, features = c("GTSE1", "NOTCH3", "VCAN", "MYBL1", "CEP170B", "DUSP15", "DGKA", "SDC1", "NRP1", "TAP1", "ERCC5", "SLC27A3"), group.by = "STEM_ON_OFF")
 VlnPlot(GC_malignant_subset_BT, features = c("KANK3", "SLC19A2", "ITGA6", "DGKI", "SIVA1", "RAP2A", "RBM38", "ICAM1", "CAD", "CHST3", "MCM7", "AKAP1"), group.by = "STEM_ON_OFF")
 VlnPlot(GC_malignant_subset_BT, features = c("NME4", "THYN1", "GPX3", "ARL4C", "ASS1", "EFNB2", "FRRS1", "EI24", "ZMAT3", "NES"), group.by = "STEM_ON_OFF")
@@ -258,7 +256,7 @@ Immune_ON <- Immune_ON_OFF %>% subset(Immune_ON_OFF =="ON")
 Immune_ON$ON_ALL <- paste("Immune", Immune_ON$Immune_ON_OFF, sep="_")
 
 
-ALL_cells <- bind_rows(Neural_like_ON, Melanocytic_ON, Mesenchymal_ON, Trans_reg_ON, preEMT_ON, Immune_ON, UPR_ON) #renamed duplicate names - good then merging with metadata they will be omitted (the cells that had 2x or more ON)
+ALL_cells <- bind_rows(Neural_like_ON, Melanocytic_ON, Mesenchymal_ON, Trans_reg_ON, preEMT_ON, Immune_ON, UPR_ON) #renamed duplicate names 
 dim(ALL_cells)
 ALL_cells[1:5, 1:5]
 ALL_cells <- ALL_cells %>% dplyr::select(ON_ALL)
@@ -272,7 +270,7 @@ gtest$"Mutation" <- plyr::revalue(as.character(gtest$`Mut type`),
                                   c("N/A" = "NA"
                                   ))
 cell_num <- gtest %>%
-  mutate(sample_id = as.factor(paste(orig.ident,Mutation,Malignant_clusters, sep="_"))) %>% # Flo here you can exchange Mutation by the origin primary or met from the Tirosh data
+  mutate(sample_id = as.factor(paste(orig.ident,Mutation,Malignant_clusters, sep="_"))) %>% 
   mutate(ON_ALL = as.factor(ON_ALL)) %>%
   group_by(sample_id, ON_ALL, .drop=FALSE) %>%
   dplyr::summarise(n=n()) %>%
@@ -286,20 +284,8 @@ cell_percentage<- left_join(cell_num, total_cells) %>%
   mutate(percentage = n/total*100)
 cell_percentage
 cell_percentage$Mutation <- factor(cell_percentage$Mutation, levels = c("NRAS", "BRAF", "WT", "NA"))
-pdf("/Users/u0128760/Documents/PROJECTS/Resource_paper_BT/Percentage_per_sample_mutation.pdf", height = 3.5, width = 10)
+pdf("/Users/Documents/PROJECTS/Percentage_per_sample_mutation.pdf", height = 3.5, width = 10)
 ggplot(cell_percentage, aes(orig.ident, y=percentage, fill=ON_ALL))+geom_bar(stat="identity", position = 'stack', width = 0.9)+RotatedAxis() +  labs(fill = "NRAS_predicted_cells") + theme(axis.title.x=element_blank()) +facet_wrap(~Mutation, ncol = 4, scales = "free") + theme_classic() + RotatedAxis()
 dev.off()
-
-
-
-
-
-
-
-
-
-
-
-
 
 
