@@ -26,7 +26,7 @@ options(future.globals.maxSize = 10000 * 1024^2)
 NRAS__1 <- readRDS("NRAS__1.rds")
 NRAS__3 <- readRDS("NRAS__3.rds")
 #NRAS__1 = CMA001
-#NRAS__3 = CMA078 + CMA080 + CMA081 + CMA082 + CMA083 + CMA084 + CMA085 + CMA086
+#NRAS__3 = CMA079 + CMA080 + CMA081 + CMA082 + CMA083 + CMA084 + CMA085 + CMA086
 
 ########### names for seurat objects ################
 file_list1 <- c("NRAS__1",
